@@ -51,6 +51,7 @@
             <resource>
                 <directory>src/main/java</directory>
                 <includes>
+                    <!--引入dao的xml配置文件，可以理解为其实现类-->
                     <include>**/*.xml</include>
                 </includes>
             </resource>

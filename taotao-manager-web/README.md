@@ -1,0 +1,2 @@
+表现层
+采用SpringMVC框架，由SpringMVC框架管理Controller
