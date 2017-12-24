@@ -1,5 +1,6 @@
 package com.taotao.controller;
 
+import com.taotao.common.pojo.EasyUIDataGridResult;
 import com.taotao.pojo.TbItem;
 import com.taotao.service.ItemService;
 import org.slf4j.Logger;
@@ -24,6 +25,13 @@ public class ItemController {
         TbItem tbItem = itemService.getItemById(itemId);
         logger.info("ItemController.getItemById.info: {}", tbItem.getId());
         return tbItem;
+    }
+
+    @GetMapping("/item/list")
+    @ResponseBody
+    public EasyUIDataGridResult getItemList(Integer page, Integer rows) {
+        EasyUIDataGridResult result = itemService.getItemList(page, rows);
+        return result;
     }
 }
 
