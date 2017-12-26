@@ -35,13 +35,18 @@ public class ContentServiceImpl implements ContentService {
         contentDao.insert(content);
         //同步缓存
         //删除对应的缓存信息
-        jedisClient.hdel(INDEX_CONTENT, content.getCategoryId().toString());
+        try {
+            jedisClient.hdel(INDEX_CONTENT, content.getCategoryId().toString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return TaotaoResult.ok();
     }
 
     @Override
     public List<TbContent> getContentByCid(long cid) {
         //先查询缓存
+        //用try-catch，为了防止redis不可用了，服务还能正常运行
         try {
             //查询缓存
             String json = jedisClient.hget(INDEX_CONTENT, cid + "");
