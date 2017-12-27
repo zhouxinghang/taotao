@@ -19,6 +19,8 @@ import com.taotao.common.pojo.SearchResult;
  * 查询索引库商品dao
  * Created by admin on 2017/12/26.
  */
+
+@Repository
 public class SearchDao {
 
     @Autowired
