@@ -5,13 +5,14 @@ import com.taotao.search.dao.SearchDao;
 import com.taotao.search.service.SearchService;
 import org.apache.solr.client.solrj.SolrQuery;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * Created by admin on 2017/12/27.
  * 商品搜索功能
  */
 
-
+@Service
 public class SearchServiceImpl implements SearchService {
     @Autowired
     SearchDao searchDao;
