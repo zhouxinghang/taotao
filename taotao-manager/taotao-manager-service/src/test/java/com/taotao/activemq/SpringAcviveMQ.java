@@ -11,7 +11,7 @@ import javax.jms.*;
 /**
  * Created by admin on 2017/12/28.
  */
-public class SpringAcvivemq {
+public class SpringAcviveMQ {
 
     @Test
     public void testJmsTemplate() throws Exception{

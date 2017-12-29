@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 /**
  * Created by admin on 2017/12/26.
+ * Solr索引所需的数据
+ * 从数据库中查询出SearchItem，将SearchItem存储在solrDB中
  */
 public class SearchItem implements Serializable{
     private String id;

@@ -8,7 +8,7 @@ import javax.jms.*;
 /**
  * Created by admin on 2017/12/28.
  */
-public class TestActiveMq {
+public class TestActiveMQ {
     @Test
     public void testQueueProducer() throws JMSException {
         //1.创建一个连接工厂对象ConnectionFactory对象。需要指定mq服务的ip及端口

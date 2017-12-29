@@ -13,8 +13,12 @@ import com.taotao.pojo.TbItemDesc;
 import com.taotao.pojo.TbItemQuery;
 import com.taotao.service.ItemService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jms.core.JmsTemplate;
+import org.springframework.jms.core.MessageCreator;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
+import javax.jms.*;
 import java.util.Date;
 import java.util.List;
 
@@ -29,6 +33,11 @@ public class ItemServiceImpl implements ItemService {
     private TbItemDao tbItemDao;
     @Autowired
     private TbItemDescDao tbItemDescDao;
+    @Autowired
+    private JmsTemplate jmsTemplate;
+    @Resource(name = "itemAddtopic")
+    private Destination destination;
+
     @Override
     public TbItem getItemById(long itemId) {
         return tbItemDao.selectByPrimaryKey(itemId);
@@ -72,6 +81,12 @@ public class ItemServiceImpl implements ItemService {
         tbItemDesc.setCreated(new Date());
         tbItemDesc.setUpdated(new Date());
         tbItemDescDao.insert(tbItemDesc);
+        //向Activemq发送商品添加消息
+        jmsTemplate.send(destination, session -> {
+            //发送商品id
+            TextMessage textMessage = session.createTextMessage(itemId + "");
+            return textMessage;
+        });
         return TaotaoResult.ok();
     }
 }
