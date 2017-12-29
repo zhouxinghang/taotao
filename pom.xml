@@ -15,6 +15,7 @@
         <module>taotao-portal-web</module>
         <module>taotao-search</module>
         <module>taotao-search-web</module>
+        <module>taotao-item-web</module>
     </modules>
     <packaging>pom</packaging>
     <properties>
