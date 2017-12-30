@@ -1,11 +1,15 @@
 package com.taotao.sso.service.impl;
 
 import com.taotao.common.pojo.TaotaoResult;
+import com.taotao.common.util.JsonUtils;
 import com.taotao.dao.TbUserDao;
+import com.taotao.jedis.JedisClient;
 import com.taotao.pojo.TbUser;
 import com.taotao.pojo.TbUserQuery;
 import com.taotao.sso.service.UserService;
+import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.DigestUtils;
@@ -13,6 +17,7 @@ import org.springframework.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by admin on 2017/12/30.
@@ -22,7 +27,12 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
     @Autowired
     private TbUserDao tbUserDao;
-
+    @Autowired
+    private JedisClient jedisClient;
+    @Value("${USER_SESSION}")
+    private String USER_SESSION;
+    @Value("${SESSION_EXPIRE}")
+    private Integer SESSION_EXPIRE;
     @Override
     public TaotaoResult checkData(String data, int type) {
         TbUserQuery tbUserQuery = new TbUserQuery();
@@ -50,14 +60,37 @@ public class UserServiceImpl implements UserService {
         return TaotaoResult.ok();
     }
 
+    /**
+     * 登录
+     * 通过用户名查询用户，再来校验密码。而不是通过用户名和密码一起查询
+     * @param username
+     * @param password
+     * @return
+     */
     @Override
     public TaotaoResult login(String username, String password) {
-
-
-
-
-
-        return null;
+        //通过用户名查询用户
+        TbUserQuery tbUserQuery = new TbUserQuery();
+        TbUserQuery.Criteria criteria = tbUserQuery.createCriteria();
+        criteria.andUsernameEqualTo(username);
+        List<TbUser> users = tbUserDao.selectByExample(tbUserQuery);
+        if(CollectionUtils.isEmpty(users)) {
+            return TaotaoResult.build(400, "用户名或密码错误");
+        }
+        //校验密码是否正确
+        TbUser user = users.get(0);
+        if(!DigestUtils.md5DigestAsHex(password.getBytes()).equals(user.getPassword())) {
+            return TaotaoResult.build(400, "用户名或密码错误");
+        }
+        //生成token
+        String token = UUID.randomUUID().toString();
+        //清空密码
+        user.setPassword(null);
+        //将用户信息存储到redis，key是token
+        jedisClient.set(USER_SESSION + ":" + token, JsonUtils.objectToJson(user));
+        jedisClient.expire(USER_SESSION + ":" + token, SESSION_EXPIRE);
+        //登录成功，返回token
+        return TaotaoResult.ok(token);
     }
 
     @Override
@@ -95,7 +128,7 @@ public class UserServiceImpl implements UserService {
             }
         }
         //校验通过后，补全pojo
-        user.setCreated(new Date());2
+        user.setCreated(new Date());
         user.setUpdated(new Date());
         //密码MD5加密
         String md5Pass = DigestUtils.md5DigestAsHex(user.getPassword().getBytes());
