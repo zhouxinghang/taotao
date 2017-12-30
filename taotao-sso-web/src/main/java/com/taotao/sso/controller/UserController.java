@@ -2,6 +2,7 @@ package com.taotao.sso.controller;
 
 import com.taotao.common.pojo.TaotaoResult;
 import com.taotao.common.util.CookieUtils;
+import com.taotao.common.util.JsonUtils;
 import com.taotao.pojo.TbUser;
 import com.taotao.sso.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,4 +52,14 @@ public class UserController {
         return result;
     }
 
+    @GetMapping("/user/token/{token}")
+    @ResponseBody
+    public String getUserByToken(@PathVariable String token, String callback) {
+        TaotaoResult result = userService.getUserByToken(token);
+        if(result.getStatus() == 400) {
+            return JsonUtils.objectToJson(result.getData());
+        } else {
+            return JsonUtils.objectToJson(result.getData());
+        }
+    }
 }
