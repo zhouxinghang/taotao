@@ -57,7 +57,7 @@ public class UserServiceImpl implements UserService {
             return TaotaoResult.ok(false);
         }
         //数据可用
-        return TaotaoResult.ok();
+        return TaotaoResult.ok(true);
     }
 
     /**
@@ -118,17 +118,17 @@ public class UserServiceImpl implements UserService {
         }
         //判断密码是否为空
         if(StringUtils.isEmpty(user.getPassword())) {
-           return TaotaoResult.build(400, "密码不呢个为空");
+           return TaotaoResult.build(400, "密码不能为空");
         }
         //校验手机号
-        if(StringUtils.isEmpty(user.getPhone())) {
+        if(!StringUtils.isEmpty(user.getPhone())) {
             checkResult = checkData(user.getPhone(), 2);
             if(!(Boolean) checkResult.getData()) {
                 return TaotaoResult.build(400, "手机号重复");
             }
         }
         //校验邮箱
-        if(StringUtils.isEmpty(user.getEmail())) {
+        if(!StringUtils.isEmpty(user.getEmail())) {
             checkResult = checkData(user.getEmail(), 3);
             if(!(Boolean) checkResult.getData()) {
                 return TaotaoResult.build(400, "邮箱重复");
