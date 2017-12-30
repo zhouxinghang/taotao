@@ -4,7 +4,6 @@ import com.taotao.item.pojo.Item;
 import com.taotao.pojo.TbItem;
 import com.taotao.pojo.TbItemDesc;
 import com.taotao.service.ItemService;
-import freemarker.core.ParseException;
 import freemarker.template.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer;
 
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.TextMessage;
@@ -41,7 +39,7 @@ public class ItemAddMesssageListener implements MessageListener {
             TextMessage textMessage = (TextMessage) message;
             String strId = textMessage.getText();
             Long itemId = Long.parseLong(strId);
-            logger.info("ItemaddMessageListener.onMessage.new item id:{}",strId);
+            logger.info("ItemaddMessageListener.onMessage.itemAddTopic.new item id:{}",strId);
             //等待事务提交
             Thread.sleep(1000);
             //根据id查询商品及商品描述

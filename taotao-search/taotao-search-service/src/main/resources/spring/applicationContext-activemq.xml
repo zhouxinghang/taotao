@@ -10,7 +10,7 @@
 	
 	<!-- JMS服务厂商提供的ConnectionFactory -->
 	<bean id="targetConnectionFactory" class="org.apache.activemq.ActiveMQConnectionFactory">
-		<constructor-arg name="brokerURL" value="tcp://60.205.224.98:61616"/>
+		<constructor-arg name="brokerURL" value="tcp://192.168.137.12:61616"/>
 	</bean>
 
 	<!-- spring对象ConnectionFactory的封装 -->

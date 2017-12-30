@@ -31,7 +31,7 @@ public class ItemAddMessageListener implements MessageListener {
         try {
             TextMessage textMessage = (TextMessage) message;
             String text = textMessage.getText();
-            logger.info("ItemMessageListener.onMessage.info: {}", text);
+            logger.info("ItemMessageListener.onMessage.itemAddTopic.new item : {}", text);
             long itemId = Long.parseLong(text);
             //根据商品id查询商品信息
             //等待事务提交
