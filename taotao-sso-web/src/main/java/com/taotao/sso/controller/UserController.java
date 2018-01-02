@@ -7,7 +7,9 @@ import com.taotao.pojo.TbUser;
 import com.taotao.sso.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -54,12 +56,15 @@ public class UserController {
 
     @GetMapping("/user/token/{token}")
     @ResponseBody
-    public String getUserByToken(@PathVariable String token, String callback) {
+    public Object getUserByToken(@PathVariable String token, String callback) {
         TaotaoResult result = userService.getUserByToken(token);
-        if(result.getStatus() == 400) {
-            return JsonUtils.objectToJson(result.getData());
-        } else {
-            return JsonUtils.objectToJson(result.getData());
+        //判断是不是jsonp请求
+        if(!StringUtils.isEmpty(callback)) {
+            MappingJacksonValue mappingJacksonValue = new MappingJacksonValue(result);
+            //设置回调方法
+            mappingJacksonValue.setJsonpFunction(callback);
+            return mappingJacksonValue;
         }
+        return result;
     }
 }

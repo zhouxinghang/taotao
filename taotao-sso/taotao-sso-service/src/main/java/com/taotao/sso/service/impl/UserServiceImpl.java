@@ -7,7 +7,6 @@ import com.taotao.jedis.JedisClient;
 import com.taotao.pojo.TbUser;
 import com.taotao.pojo.TbUserQuery;
 import com.taotao.sso.service.UserService;
-import org.omg.PortableInterceptor.USER_EXCEPTION;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
