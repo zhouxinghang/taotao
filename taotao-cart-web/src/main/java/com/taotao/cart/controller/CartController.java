@@ -36,6 +36,7 @@ public class CartController {
     @RequestMapping("/cart/add/{itemId}")
     public String addItemCart(@PathVariable Long itemId, @RequestParam(defaultValue = "1") Integer num,
                               HttpServletRequest request, HttpServletResponse response) {
+        //TODO  cookie和redis同时使用
         //取购物车商品列表
         List<TbItem> cartItemList = getCartItemList(request);
         //判断购物车是否存在该商品
